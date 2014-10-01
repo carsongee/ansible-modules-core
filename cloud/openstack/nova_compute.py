@@ -112,6 +112,12 @@ options:
         - The name of the security group to which the VM should be added
      required: false
      default: None
+   availability_zone:
+     version_added: "1.8"
+     description:
+        - The name of the availability zone to which the VM should be added
+     required: false
+     default: None
    nics:
      description:
         - A list of network id's to which the VM's interface should be attached
@@ -423,6 +429,7 @@ def _create_server(module, nova):
                 'nics' : module.params['nics'],
                 'meta' : module.params['meta'],
                 'security_groups': module.params['security_groups'].split(','),
+                'availability_zone': module.params['availability_zone'],
                 #userdata is unhyphenated in novaclient, but hyphenated here for consistency with the ec2 module:
                 'userdata': module.params['user_data'],
                 'config_drive': module.params['config_drive'],
@@ -539,6 +546,7 @@ def main():
         flavor_include                  = dict(default=None),
         key_name                        = dict(default=None),
         security_groups                 = dict(default='default'),
+        availability_zone               = dict(default=None),
         nics                            = dict(default=None),
         meta                            = dict(default=None),
         wait                            = dict(default='yes', choices=['yes', 'no']),
